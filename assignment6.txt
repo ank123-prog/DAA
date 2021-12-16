@@ -1,0 +1,218 @@
+Program 25: Given a graph, Design an algorithm and implement it using a program to implement FloydWarshall all pair shortest path algorithm.
+
+Code: #include<bits/stdc++.h> using namespace std; #define INF 1e9
+
+int main() {
+int n;
+cout<<"for values INF enter -1"<<endl; cin>>n;
+int a;
+int arr[n][n], dist[n][n]; for(int i=0;i<n;i++) {
+for(int j=0;j<n;j++) { cin>>a; if(a<0){
+arr[i][j] = INF;
+}
+else
+arr[i][j] = a;
+dist[i][j] = arr[i][j];
+}
+}
+for(int k=0;k<n;k++) {
+for(int i=0;i<n;i++) {
+for(int j=0;j<n;j++) {
+if(dist[i][k]+dist[k][j] < dist[i][j]) {
+dist[i][j] = dist[i][k]+dist[k][j];
+}
+}
+}
+}
+cout<<"Shortest Distance Matrix: "<<endl; for(int i=0;i<n;i++) {
+for(int j=0;j<n;j++) {
+if(dist[i][j]==INF) {
+cout<<"INF ";
+}
+ 
+else
+
+}
+ 
+
+cout<<dist[i][j]<<" ";
+ 
+cout<<endl;
+}
+return 0;
+}
+
+Output:
+ 
+Program 26: Given a knapsack of maximum capacity w. N items are provided, each having its own value and weight. You have to Design an algorithm and implement it using a program to find the list of the selected items such that the final selected content has weight w and has maximum value. You can take fractions of items, i.e. the items can be broken into smaller pieces so that you have to carry only a fraction xi of item i, where 0 ≤xi≤ 1.
+
+Code: #include<bits/stdc++.h> using namespace std;
+
+int main() {
+int n; cin>>n;
+vector<double> items(n); vector<double> val(n);
+vector<vector<double>> job;//to store pair of for(int i=0;i<n;i++) {
+cin>>items[i];
+}
+for(int i=0;i<n;i++) {
+cin>>val[i]; job.push_back({val[i]/items[i],items[i],i+1});
+}
+double k; cin>>k;
+sort(job.rbegin(), job.rend());//sort acc to val per wt vector<pair<double,double>> ls;
+float profit =0; for(int i=0;i<n;i++) {
+if(job[i][1] >= k) {
+profit += k*job[i][0]; ls.push_back(make_pair(k, job[i][2])); break;
+ 
+}
+else {
+
+}
+ 
+
+
+profit += job[i][1]*job[i][0];
+ 
+ls.push_back(make_pair(job[i][1], job[i][2])); k = k - job[i][1];
+}
+ 
+cout<<"Maximum Value is: "<<profit<<endl; cout<<"Item - Weight"<<endl;
+for(auto it: ls)
+cout<<it.first<<" - "<<it.second<<endl; return 0;
+}
+
+Output:
+ 
+Program 27: Given an array of elements. Assume arr[i] represents the size of file i. Write an algorithm and a program to merge all these files into single file with minimum computation. For given two files A and B with sizes m and n, computation cost of merging them is O(m+n). (Hint: use greedy approach).
+
+Code: #include<bits/stdc++.h> using namespace std;
+
+int main() {
+int n; cin>>n;
+vector<int> a(n); for(int i=0;i<n;i++){
+cin>>a[i];
+}
+priority_queue<int, vector<int>, greater<int>> minheap; for(int i=0;i<n;i++) {
+minheap.push(a[i]);
+}
+int ans = 0; while(minheap.size()>1) {
+int e1 = minheap.top(); minheap.pop();
+int e2 = minheap.top(); minheap.pop();
+ans += e1+e2; minheap.push(e1 + e2);
+}
+cout<<ans; return 0;
+}
+
+Output:
+ 
+Program 28: Given a list of activities with their starting time and finishing time. Your goal is to select maximum number of activities that can be performed by a single person such that selected activities must be non-conflicting. Any activity is said to be non-conflicting if starting time of an activity is greater than or equal to the finishing time of the other activity. Assume that a person can only work on a single activity at a time.
+
+Code: #include<bits/stdc++.h> using namespace std;
+
+int main() {
+int n; cin>>n;
+vector<int> st(n), dline(n); vector<vector<int>> activity; for(int i=0;i<n;i++){
+cin>>st[i];
+}
+for(int i=0;i<n;i++){
+cin>>dline[i]; activity.push_back({dline[i],st[i], i+1});
+}
+sort(activity.begin(), activity.end()); vector<int> selected;
+int count=0;
+int currentEnd = -1; for(int i=0;i<n;i++) {
+if(activity[i][1]>currentEnd) { count++;
+currentEnd = activity[i][0]; selected.push_back(activity[i][2]);
+}
+}
+cout<<"No. of non-conflictin activities: "<<count<<endl; cout<<"List of selected activites: ";
+for(auto i: selected) {
+cout<<i<<" ";
+}
+return 0;
+}
+ 
+Output:
+ 
+Program 29: Given a long list of tasks. Each task take specific time to accomplish it and each task has a deadline associated with it. You have to design an algorithm and implement it using a program to find maximum number of tasks that can be completed without crossing their deadlines and also find list of selected tasks.
+
+Code: #include<bits/stdc++.h> using namespace std;
+
+bool compare(pair<int,int>a,pair<int,int>b) { return a.first > b.first;
+}
+
+int main() {
+int n; cin>>n; int p[n];
+int d[n];
+for(int i=0;i<n;i++)
+cin>>p[i]; for(int i=0;i<n;i++)
+cin>>d[i]; vector<pair<int,int> > jobs; int profit,deadline;
+for(int i=0;i<n;i++){
+jobs.push_back(make_pair(p[i],d[i]));
+}
+sort(jobs.begin(),jobs.end(),compare); int maxEndTime = 0;
+for(int i=0;i<n;i++) {
+if(jobs[i].second > maxEndTime) maxEndTime = jobs[i].second;
+}
+vector<int> ans;
+int fill[maxEndTime];
+int count = 0, maxProfit = 0; for(int i=0;i<n;i++) fill[i] = -1;
+for(int i=0;i<n;i++){
+int j = jobs[i].second - 1; while(j>=0 && fill[i]!=-1) j--;
+ 
+if(j>=0 && fill[j]==-1){ fill[j] = i; ans.push_back(i); count++;
+maxProfit = maxProfit + jobs[i].first;
+}
+}
+cout<<"Maximum no of tasks : "<<count<<endl; cout<<"Selected task numbers : ";
+for(int i=0;i<ans.size();i++) cout<<ans[i]<<" ";
+return 0;
+}
+
+Output:
+ 
+Program 30: Given an unsorted array of elements, design an algorithm and implement it using a program to find whether majority element exists or not. Also find median of the array. A majority element is an element that appears more than n/2 times, where n is the size of array.
+
+Code:
+#include <bits/stdc++.h> using namespace std;
+
+string majorityElement(int *arr, int n) {
+int count = 1, max_ele = -1, temp = arr[0], ele, f=0; for(int i=1;i<n;i++) {
+if(temp==arr[i]) {
+count++;
+ 
+}
+else {
+
+
+}
+ 
+
+
+count = 1; temp = arr[i];
+ 
+if(max_ele<count) {
+max_ele = count; ele = arr[i]; if(max_ele>(n/2)) {
+f = 1;
+break;
+}
+}
+}
+return (f==1 ? "yes" : "no");
+}
+
+int main() {
+int n; cin>>n; int arr[n];
+for(int i=0;i<n;i++)
+cin>>arr[i]; sort(arr, arr+n);
+cout<<majorityElement(arr, n)<<endl; if(n%2 == 0)
+ 
+
+else
+ 
+cout<<(arr[n/2 -1]+arr[n/2])/2;
+
+cout<<arr[n/2];
+ 
+return 0;
+}
+
+Output:

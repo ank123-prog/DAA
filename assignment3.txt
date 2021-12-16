@@ -1,0 +1,150 @@
+Program 11: Given an unsorted array of integers, design an algorithm and implement it using a program to sort an array of elements by partitioning the array into two subarrays based on a pivot element such that one of the sub array holds values smaller than the pivot element while another sub array holds values greater than the pivot element. Pivot element should be selected randomly from the array. Your program should also find number of comparisons and swaps required for sorting the array.
+
+Code:
+#include<bits/stdc++.h> using namespace std;
+
+int partition(int arr[], int l, int r, int &compare, int &swaps) { srand(time(0));
+int pivot=rand()%(r-l+1)+l; int i=l-1,j=l; swap(arr[pivot],arr[r]); swaps++;
+pivot=arr[r]; while(j<=r) {
+compare++; if(arr[j]<=pivot) {
+swaps++; i++;
+swap(arr[i],arr[j]);
+} j++;
+}
+return i;
+}
+
+void QuickSort(int arr[], int l, int r, int &compare, int &swaps) { int p;
+if(l<r) {
+p=partition(arr, l, r, compare, swaps); QuickSort(arr, l, p-1, compare, swaps); QuickSort(arr, p+1, r, compare, swaps);
+}
+}
+
+int main() { int t; cin>>t;
+ 
+while(t--) {
+int n,compare=0, swaps=0; cin>>n;
+int arr[n];
+for(int i=0;i<n;i++) cin>>arr[i];
+QuickSort(arr,0,n-1,compare,swaps); for(int i=0;i<n;i++)
+cout<<arr[i]<<" "; cout<<"\nComparisons = "<<compare; cout<<"\nSwaps = "<<swaps<<endl;
+}
+return 0;
+}
+Output:
+
+ 
+Program 12: Given an unsorted array of integers, design algorithm and implement it using a program to an find Kth smallest or largest element in the array.(Worst case Time Complexity = O(n))
+
+Code: #include<bits/stdc++.h> using namespace std;
+
+int partition(int arr[], int l, int r) { srand(time(0));
+int pivot=rand()%(r-l+1)+l; int i=l-1,j=l; swap(arr[pivot],arr[r]); pivot=arr[r];
+while(j<=r) { if(arr[j]<=pivot) {
+i++;
+swap(arr[i],arr[j]);
+} j++;
+}
+return i;
+}
+
+int KthElement(int arr[], int l, int r, int k) { int p;
+if(l<=r) { p=partition(arr, l, r); if(p==k-1)
+return p; else if(p>k-1)
+return KthElement(arr, l, p-1,k); else
+return KthElement(arr, p+1, r,k);
+}
+return -1;
+}
+
+int main() { int t; cin>>t; while(t--) {
+int n,k,kth;
+ 
+cin>>n; int arr[n];
+for(int i=0;i<n;i++) cin>>arr[i];
+cin>>k; if(k>0&&k<=n) {
+kth=KthElement(arr,0,n-1,k); cout<<arr[kth]<<endl;
+}
+else
+cout<<"Not Present"<<endl;
+}
+return 0;
+}
+
+Output:
+ 
+Program 13: Given an unsorted array of alphabets containing duplicate elements. Design an algorithm and implement it using a program to find which alphabet has maximum number of occurrences and print it.
+
+Code: #include<bits/stdc++.h> using namespace std;
+int main(){ int t; cin>>t; while(t--) {
+int n,count; char ch='a'; cin>>n; char arr[n];
+int alpha[26]={0}; for(int i=0;i<n;i++)
+cin>>arr[i]; sort(arr,arr+n); for(int i=0;i<n;i++)
+alpha[arr[i]-97]++; count=alpha[0]; for(int i=1;i<26;i++)
+if(alpha[i]>count) { count=alpha[i]; ch=i+97;
+}
+if(count>1)
+cout<<ch<<" - "<<count<<endl; else
+cout<<"No Duplicates Present\n";
+}
+return 0;
+}
+Output:
+ 
+Program 14: Given an unsorted array of integers, design an algorithm and implement it using a program to find whether two elements exist such that their sum is equal to the given key element. (Time Complexity = O(n log n)).
+
+Code: #include<bits/stdc++.h> using namespace std;
+
+int BinarySearch(vector<int> &v , int l, int r, int key) { int mid;
+while(l<=r){ mid=l+(r-l)/2; if(v[mid]==key)
+return mid;
+else if(v[mid]>key) r=mid-1;
+else
+l=mid+1;
+}
+return -1;
+}
+
+int main(){ int t; cin>>t; while(t--) {
+int i,n,a,k,key; cin>>n; vector<int> v; for(i=0;i<n;i++){
+cin>>a; v.push_back(a);
+}
+cin>>key; sort(v.begin(),v.end()); for(i=0;i<n-1;i++) {
+k=BinarySearch(v,i+1,n-1,key-v[i]); if(k!=-1)
+break;
+}
+if(k!=-1)
+cout<<v[i]<<" "<<v[k]<<endl; else
+ 
+cout<<"No Such Element Exist\n";
+}
+return 0;
+}
+
+Output:
+
+ 
+Program 15: You have been given two sorted integer arrays of size m and n. Design an algorithm and implement it using a program to find list of elements which are common to both. (Time Complexity = O(m+n))
+
+Code: #include<bits/stdc++.h> using namespace std;
+
+int main() {
+int i=0,j=0,n,m; vector<int> v; cin>>m;
+int arr1[m];
+for(int k=0;k<m;k++) cin>>arr1[k];
+cin>>n; int arr2[n];
+for(int k=0;k<n;k++) cin>>arr2[k];
+while(i<m&& j<n) { if(arr1[i]==arr2[j]) {
+v.push_back(arr1[i]); i++;
+j++;
+}
+else if(arr1[i]<arr2[j]) i++;
+else
+j++;
+}
+sort(v.begin(),v.end()); for(auto k:v)
+cout<<k<<" "; return 0;
+}
+
+Output:
+

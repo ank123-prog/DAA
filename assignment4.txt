@@ -1,0 +1,205 @@
+Program 16: Given a (directed/undirected) graph, design an algorithm and implement it using a program to find if a path exists between two given vertices or not. (Hint: use DFS).
+
+Code:
+#include<bits/stdc++.h> using namespace std;
+
+bool findpath(int src, int dest, vector<vector<int>>& graph) { if( src == dest)
+return true; int n = graph.size();
+vector<bool> visited(n, false); visited[src] = true;
+stack<int> s; s.push(src); while(!s.empty()){
+int a = s.top();
+s.pop();
+for(int x: graph[a]){
+if(x==dest)
+return true; if(!visited[x]){
+visited[x] = true; s.push(x);
+}
+}
+}
+return false;
+}
+
+int main() {
+int n,m; cin>>n>>m;
+vector<vector<int>> graph(n); for(int i=0;i<m;i++){
+int u,v; cin>>u>>v;
+graph[u].push_back(v); graph[v].push_back(u);
+}
+ 
+int source,dest; cin>>source>>dest; if(findpath(source,dest, graph))
+cout<<"Yes Path Exists";
+else
+cout<<"No Such Path Exists";
+return 0;
+}
+
+Output:
+ 
+Program 17: Given a directed graph, design an algorithm and implement it using a program to find whether a cycle exists in the graph or not.
+
+Code: #include<bits/stdc++.h> using namespace std;
+
+vector<vector<int>> adj; vector<bool> vis; vector<int> col;
+bool bipart;
+
+//assign color to nodes either 0 or 1 void color(int u, int curr) {
+if(col[u] != -1 and col[u]!= curr){ bipart = false;
+return;
+}
+col[u]= curr; if(vis[u])
+return; vis[u] = true; for(auto i: adj[u]){
+color(i,curr xor 1);
+}
+}
+
+int main() {
+int n,m; cin>>n>>m;
+adj = vector<vector<int>>(n); vis = vector<bool>(n,false); col = vector<int>(n,-1); bipart = true;
+for(int i=0;i<m;i++) { int u,v; cin>>u>>v;
+adj[u].push_back(v); adj[v].push_back(u);
+}
+ 
+for(int i=0;i<n;i++) {
+if(!vis[i]) {
+color(i,0);
+}
+}
+if(bipart)
+cout<<"Yes Bipartite";
+else
+cout<<"Not Bipartite";
+return 0;
+}
+
+Output:
+ 
+Program 18: Given a directed graph, design an algorithm and implement it using a program to find whether cycle exists in the graph or not.
+
+Code:
+#include<bits/stdc++.h> using namespace std;
+
+bool iscycle(int src, vector<vector<int>>& adj, vector<bool>& vis, int parent) { vis[src] = true;
+for(auto i: adj[src]){
+if(i != parent){
+if(vis[i])
+return true;
+if(!vis[i] and iscycle(i,adj,vis,src)){ return true;
+}
+}
+}
+return false;
+}
+int main() {
+int n,m; cin>>n>>m;
+vector<vector<int>> adj(n); vector<bool> vis(n,false); bool cycle = false;
+for(int i=0;i<m;i++){ int u,v; cin>>u>>v;
+adj[u].push_back(v); adj[v].push_back(u);
+}
+// set node 0 as visited vis[0] = true; for(int i=0;i<n;i++){
+if(!vis[i] and iscycle(i, adj, vis, -1)){ cycle = true;
+break;
+}
+}
+ 
+if(cycle)
+cout<<"Yes Cycle Exists";
+else
+cout<<"Cycle Not Present";
+return 0;
+}
+
+Output:
+ 
+Program 19: After end term examination, Akshay wants to party with his friends. All his friends are living as paying guest and it has been decided to first gather at Akshay’s house and then move towards party location. The problem is that no one knows the exact address of his house in the city. Akshay as a computer science wizard knows how to apply his theory subjects in his real life and came up with an amazing idea to help his friends. He draws a graph by looking in to location of his house and his friends’ location (as a node in the graph) on a map. He wishes to find out shortest distance and path covering that distance from each of his friend’s location to his house and then whatsapp them this path so that they can reach his house in minimum time. Akshay has developed the program that implements Dijkstra’s algorithm but not sure about correctness of results. Can you also implement the same algorithm and verify the correctness of Akshay’s results? (Hint: Print shortest path and distance from friends’ location to Akshay’s house).
+
+Code: #include<bits/stdc++.h> using namespace std;
+void path(vector<int>& parent, int j){ if (parent[j] == - 1){
+cout<<j; return;
+}
+printf("%d ", j); path(parent, parent[j]);
+}
+
+int main()
+{
+int n,e; cin>>n>>e;
+vector<vector<pair<int,int>>> graph(n+1); for(int i=0;i<e;i++)
+{
+int s,d,w; cin>>s>>d>>w;
+graph[s].push_back({d,w});
+graph[d].push_back({s,w});
+}
+vector<int> dist(n+1,INT_MAX); set<pair<int,int>> s;
+int source;
+ 
+cin>>source; dist[source]=0; s.insert({0,source}); vector<int> parent(n+1, -1); while(!s.empty()){
+auto x = *(s.begin()); s.erase(x);
+for(auto it: graph[x.second]){
+if(dist[it.first] > dist[x.second]+it.second){ s.erase({dist[it.first],it.first}); dist[it.first] = dist[x.second]+it.second; s.insert({dist[it.first],it.first}); parent[it.first]= x.second;
+}
+}
+}
+for(int i=1;i< n+1;i++){ path(parent, i);
+cout<<" : "<<dist[i]<<endl;
+}
+return 0;
+}
+
+Output:
+ 
+Program 20: Design an algorithm and implement it using a program to solve previous question's problem using Bellman- Ford's shortest path algorithm.
+
+Code: #include<bits/stdc++.h> using namespace std;
+
+void path(vector<int>& parent, int j){ if (parent[j] == - 1){
+cout<<j; return;
+}
+printf("%d ", j); path(parent, parent[j]);
+}
+
+int main() {
+int n,e; cin>>n>>e;
+vector<vector<int>> edges; for(int i=0;i<e;i++){
+int   u,v,w; cin>>u>>v>>w; edges.push_back({u,v,w});
+edges.push_back({v,u,w});
+}
+
+vector<int> parent(n+1,-1);
+//initialize distance array vector<int> dist(n+1, 1e9);
+
+int src;
+cin>>src; //input source
+dist[src] = 0; // initialize source distance to 0
+
+//iterate n-1 times to relax each edge bool negative_cycle;
+for(int i=1;i<n;i++)
+{
+ 
+negative_cycle = false; //to detect -ve cycle
+
+for(auto it: edges){
+int u,v,w;
+u = it[0];
+v = it[1];
+w = it[2];
+if(dist[v] > dist[u]+w){
+dist[v] = dist[u]+w; parent[v] = u; negative_cycle = true;
+}
+}
+}
+
+if(negative_cycle)
+cout<<"negative cycle present";
+ 
+else{
+ 
+
+for(int i=1;i< n+1;i++){
+path(parent, i);
+cout<<" : "<<dist[i]<<endl;
+ 
+}
+}
+return 0;
+}
+
+Output:

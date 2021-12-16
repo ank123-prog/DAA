@@ -1,0 +1,166 @@
+Program 6: Given an array of non-negative integers, design an algorithm and a program to count the number of pairs of integers such that their difference is equal to a given key, K.
+
+Code: #include<bits/stdc++.h> using namespace std;
+
+int BinarySearch(vector<int> &v , int l, int r, int key) { int mid,result=0;
+while(l<=r){ mid=l+(r-l)/2; if(v[mid]==key){
+result=1; break;
+}
+else if(v[mid]>key) r=mid-1;
+else
+l=mid+1;
+}
+return result;
+}
+
+int main(){ int t; cin>>t; while(t--) {
+int n,a,count=0,key; cin>>n; vector<int> v; for(int i=0;i<n;i++){
+cin>>a; v.push_back(a);
+}
+cin>>key; sort(v.begin(),v.end());
+for(int i=n-1;i>0;i--) { count+=BinarySearch(v,0,i-1,v[i]-key);
+}
+cout<<count<<endl;
+}
+return 0;
+ 
+}
+
+Output :
+
+ 
+Program 7: Given an unsorted array of integers, design an algorithm and a program to sort the array using insertion sort. Your program should be able to find number of comparisons and shifts ( shifts - total number of times the array elements are shifted from their place) required for sorting the array.
+
+Code:
+#include<bits/stdc++.h> using namespace std;
+
+void InsertionSort(int arr[], int l, int r, int &compare, int &shifts) { int i,j,temp;
+for(i=l+1;i<=r;i++) { temp=arr[i];
+j=i-1; while(j>=0){
+compare++; if(arr[j]<temp)
+break; arr[j+1]=arr[j]; shifts++;
+j--;
+}
+arr[++j]=temp;
+}
+}
+
+int main(){ int t; cin>>t; while(t--){
+int n,compare=0,shifts=0; cin>>n;
+int arr[n];
+for(int i=0;i<n;i++) cin>>arr[i];
+InsertionSort(arr,0,n-1,compare,shifts); for(int i=0;i<n;i++)
+cout<<arr[i]<<" ";
+cout<<"\ncomparisons = "<<compare<<endl; cout<<"shifts = "<<shifts<<endl;
+}
+return 0;
+}
+ 
+Output:
+
+ 
+Program 8: Given an unsorted array of integers, design an algorithm and implement a program to sort this array using selection sort. Your program should also find number of comparisons and number of swaps required.
+
+Code:
+#include<bits/stdc++.h> using namespace std;
+
+void selectionSort(int arr[], int l, int r, int &compare, int &swaps) { int min;
+for(int i=l;i<r;i++) { min=i;
+for(int j=i+1;j<=r;j++) { compare++; if(arr[min]>arr[j])
+min=j;
+}
+if(min!=i) { swap(arr[i],arr[min]); swaps++;
+}
+}
+}
+
+int main(){ int t; cin>>t; while(t--){
+int n,compare=0,swaps=0; cin>>n;
+int arr[n];
+for(int i=0;i<n;i++) cin>>arr[i];
+selectionSort(arr, 0, n-1, compare, swaps); for(int i=0;i<n;i++)
+cout<<arr[i]<<" ";
+cout<<"\ncomparisons = "<<compare<<endl; cout<<"swaps ="<<swaps<<endl;
+}
+return 0;
+}
+ 
+Output:
+
+ 
+Program 9: Given an unsorted array of positive integers, design an algorithm and implement it using a program to find whether there are any duplicate elements in the array or not. (use sorting) (Time Complexity = O(n log n))
+
+Code: #include<bits/stdc++.h> using namespace std;
+
+int main() { int t; cin>>t; while(t--) {
+int n,i,f=0; cin>>n; int arr[n];
+for(i=0;i<n;i++) cin>>arr[i]; sort(arr,arr+n);
+for(i=0;i<n-1;i++) if(arr[i]==arr[i+1]) {
+f=1;
+break;
+}
+if(f==0) cout<<"NO"<<endl;
+else
+cout<<"YES"<<endl;
+}
+return 0;
+}
+Output:
+
+ 
+Program 10: Given an unsorted array of integers, design an algorithm and implement it using a program to sort an array of elements by dividing the array into two subarrays and combining these subarrays after sorting each one of them. Your program should also find number of comparisons and inversions during sorting the array.
+
+Code: #include<bits/stdc++.h> using namespace std;
+
+int MergeSort(int[], int, int, int &); int Merge(int[], int, int, int, int &);
+
+int MergeSort(int arr[], int l, int r, int &compare) { int inversion=0,mid;
+if(l<r) {
+mid=l+(r-l)/2; inversion=MergeSort(arr,l,mid,compare); inversion+=MergeSort(arr,mid+1,r,compare); inversion+=Merge(arr,l,mid,r,compare);
+}
+return inversion;
+}
+
+int Merge(int arr[], int l, int mid, int r, int &compare) { int n1=mid-l+1,n2=r-mid,inversion=0;
+int L[n1];
+int R[n2];
+int i=l,j=mid+1,k=0;
+//creating temp array to store values while(i<=mid)
+L[k++]=arr[i++]; k=0;
+while(j<=r) R[k++]=arr[j++];
+// now merging them i=0,j=0,k=l; while(i<n1&&j<n2) {
+compare++; if(L[i]<=R[j])
+arr[k++]=L[i++]; else {
+arr[k++]=R[j++];
+ 
+inversion+=n1-i;
+}
+}
+while(i<n1) arr[k++]=L[i++];
+while(j<n2) arr[k++]=R[j++];
+return inversion;
+}
+
+int main() { int t; cin>>t; while(t--) {
+int n,compare=0,inversion; cin>>n;
+int arr[n];
+for(int i=0;i<n;i++) cin>>arr[i];
+inversion=MergeSort(arr,0,n-1,compare); for(int i=0;i<n;i++)
+cout<<arr[i]<<"  "; cout<<"\nComparisons = "<<compare; cout<<"\nInversions = "<<inversion<<endl;
+}
+return 0;
+}
+
+Output:
+
+while(t--) {
+int n,compare=0, swaps=0; cin>>n;
+int arr[n];
+for(int i=0;i<n;i++) cin>>arr[i];
+QuickSort(arr,0,n-1,compare,swaps); for(int i=0;i<n;i++)
+cout<<arr[i]<<" "; cout<<"\nComparisons = "<<compare; cout<<"\nSwaps = "<<swaps<<endl;
+}
+return 0;
+}
+Output:
+
